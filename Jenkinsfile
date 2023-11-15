@@ -1,12 +1,26 @@
 pipeline {
     agent any
+
     stages {
-        stage('Building') {
+        stage('Checkout') {
             steps {
-                sh 'mvn clean'
-                sh 'mvn compile'
+                checkout scm
             }
         }
-       
+
+        stage('Build Angular Frontend') {
+            steps {
+                script {
+                    // Install npm dependencies
+                    sh 'npm install'
+
+                    // Build the Angular application
+                    sh 'npm run build'
+                }
+            }
+        }
+
     }
+
+  
 }
