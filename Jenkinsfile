@@ -1,5 +1,14 @@
 pipeline {
     agent any
+    environment { 
+3
+        registry = "yasineromdhane/projetdevops" 
+4
+        registryCredential = 'yasineromdhane' 
+5
+        dockerImage = '' 
+6
+    }
 
     stages {
         stage('Checkout') {
@@ -19,6 +28,24 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerimage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+
+        stage('Deploy our image') { 
+            steps { 
+                script { 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                    }
+                } 
+            }
+        } 
 
     }
 
