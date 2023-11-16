@@ -3,6 +3,7 @@ pipeline {
     environment { 
         registry = "yasineromdhane/projetdevops" 
         registryCredential = 'yasineromdhane' 
+        docker_variable =  'mUE_t)s2JSBqQgt'
         dockerImage = '' 
     }
 
@@ -42,6 +43,16 @@ pipeline {
                 } 
             }
         } 
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                withCredentials([string(credentialsId: 'docker_pat', variable:'docker_variable')]) { 
+                sh "docker login -u yasineromdhane -p ${docker_variable}"
+                sh "docker push ${registry}:${BUILD_NUMBER}"}
+                }
+            }
+        }
 
     }
 
